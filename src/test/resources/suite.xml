@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Clay-BE-Test">
+    <test name="Api Verification">
+        <classes>
+            <class name="com.aneela.sites.SitesTest" />
+            <class name="com.aneela.accessGroup.AccessGroupTest" />
+        </classes>
+    </test>
+</suite>

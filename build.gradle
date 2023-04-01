@@ -1,0 +1,113 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.5.3"
+        classpath "io.qameta.allure.gradle.allure:allure-plugin:2.11.2"
+    }
+}
+
+
+plugins {
+    id 'java'
+    id 'org.openapi.generator' version '5.2.0'
+    id "io.spring.dependency-management" version "1.0.11.RELEASE"
+    id "io.qameta.allure" version "2.11.2"
+}
+apply plugin: "org.springframework.boot"
+apply plugin: "io.qameta.allure"
+
+group 'com.aneela'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+String outputDirectory = "$buildDir/generated/clay-api-client"
+
+openApiGenerate {
+    generatorName = "spring"
+    apiPackage = "com.aneela.generated.controller"
+    modelPackage = "com.aneela.generated.model"
+    inputSpec = "$rootDir/src/main/resources/api/swagger_spec.yaml".toString()
+    outputDir = outputDirectory
+    configOptions = [
+            dateLibrary: "java8"
+    ]
+}
+
+sourceSets {
+    named("main") {
+        java {
+            srcDir("$outputDirectory/src/main/java")
+        }
+    }
+}
+
+task removeModels(type: Delete) {
+    delete "$rootDir/generated"
+}
+
+//tasks removeGeneratedModelsFromBuild(type: Delete) {
+//    delete "$buildDir/generated"
+//}
+
+dependencies {
+    // test ng
+    implementation 'org.testng:testng:6.14.3'
+
+    // rest assured
+    implementation 'io.rest-assured:rest-assured:4.4.0'
+    implementation 'io.rest-assured:json-path:4.4.0'
+    implementation 'io.rest-assured:json-schema-validator:4.4.0'
+    implementation 'io.rest-assured:xml-path:4.4.0'
+    implementation 'io.rest-assured:spring-mock-mvc:4.4.0'
+
+    // lombok
+    implementation 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    // jackson
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.3.0-rc1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.14.2'
+    implementation 'org.openapitools:jackson-databind-nullable:0.2.6'
+
+    // slf4j
+    implementation 'org.slf4j:slf4j-api:2.0.0-alpha2'
+    implementation 'org.slf4j:slf4j-simple:2.0.0-alpha2'
+
+    // swagger
+    implementation 'io.swagger.core.v3:swagger-core:2.2.8'
+    implementation 'io.swagger.core.v3:swagger-annotations:2.2.8'
+    implementation 'io.springfox:springfox-swagger2:2.9.2'
+
+    // spring framework
+    implementation 'org.springframework:spring-web:6.0.7'
+    implementation 'org.springframework.boot:spring-boot-dependencies:2.5.3'
+    implementation 'org.springframework.cloud:spring-cloud-dependencies:2022.0.1'
+    implementation 'org.springframework.boot:spring-boot-autoconfigure:1.0.0.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-autoconfigure:3.0.5'
+    implementation 'org.springframework:spring-webmvc:6.0.7'
+
+    // javax
+    implementation 'javax.servlet:javax.servlet-api:3.0.1'
+    implementation 'javax.validation:validation-api:2.0.1.Final'
+    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+
+    implementation 'org.codehaus.groovy:groovy-xml:3.0.7'
+    implementation 'org.aeonbits.owner:owner:1.0.12'
+    //implementation "io.qameta.allure.gradle.allure:allure-plugin:2.11.2"
+    implementation 'com.github.javafaker:javafaker:1.0.2'
+}
+test {
+    useTestNG()
+            {
+                suites './src/test/resources/suite.xml'
+                useDefaultListeners = true
+            }
+}

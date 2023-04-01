@@ -1,0 +1,19 @@
+# Default ignored files
+/shelf/
+/.idea
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+/.allure
+**/.gradle
+**/build
+/.DS_Store
+/.graf
+/gradlew
+/gradlew.bat
+# ignore all logs
+**/*.log
+**/.DS_Store
+/allure-results
