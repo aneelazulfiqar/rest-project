@@ -23,13 +23,12 @@ public class SitesTest extends BaseTest {
     @Description("GET/v1.1/sites - verify endpoint for getting sites of current user")
     public void verifySites() {
         SiteResponsePagedResponse site = SitesClient.getSites();
-        SiteResponse firstItem = SitesClient.firstSiteData(site);
-        UserSummaryResponse firstItemOwner = firstItem.getOwner();
+        SiteResponse firstItem = SitesClient.firstSiteHavingValidSubscription(site);
 
+        softAssert.assertFalse(site.getItems().get().isEmpty(), "Items list is empty");
         softAssert.assertNotNull(firstItem.getId());
-        softAssert.assertEquals(firstItem.getCountryCode().get(), SitesDataFactory.SITE_COUNTRY_CODE);
-        softAssert.assertEquals(firstItemOwner.getEmail().get(), AuthorizationDataFactory.USERNAME);
-        softAssert.assertTrue(firstItemOwner.getHasProfile());
+        softAssert.assertTrue(firstItem.getSubscriptionValid());
+        softAssert.assertTrue(site.getNextPageLink().toString().contains(SitesDataFactory.NEXT_PAGE_LINK));
     }
 
     @Test(groups = {"smoke"})

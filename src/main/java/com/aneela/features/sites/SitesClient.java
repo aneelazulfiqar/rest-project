@@ -28,7 +28,7 @@ public class SitesClient extends RestAssuredCrud {
     }
 
     @Step
-    public static SiteResponse firstSiteData(SiteResponsePagedResponse response) {
+    public static SiteResponse firstSiteHavingValidSubscription(SiteResponsePagedResponse response) {
         return response.getItems()
                 .get()
                 .stream()
@@ -39,6 +39,6 @@ public class SitesClient extends RestAssuredCrud {
 
     @Step
     public static String getSiteId(SiteResponsePagedResponse response) {
-        return firstSiteData(response).getId().toString();
+        return firstSiteHavingValidSubscription(response).getId().toString();
     }
 }
