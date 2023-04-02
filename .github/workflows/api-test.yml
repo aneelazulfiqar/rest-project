@@ -6,18 +6,19 @@ on:
       - main
 
 jobs:
-  api_tests:
+  api-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v2
 
       - name: Setup JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '11'
+          java-version: '17'
+          distribution: 'adopt'
 
-      - name: Cache Gradle packages
+      - name: Cache Gradle Packages
         uses: actions/cache@v2
         with:
           path: ~/.gradle/caches
@@ -25,18 +26,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Build and run tests
-        run: |
-          ./gradlew clean test --info
-          ./gradlew allureReport
+      - name: Generate Swagger models
+        run: ./gradlew openApiGenerate
 
-      - name: Upload Allure results
-        uses: allure-framework/allure-github-actions@v1.0.3
-        with:
-          directory: build/allure-results
+      - name: Build and Run Tests
+        run: ./gradlew test
 
-      - name: Upload Allure report to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Generate Allure Report
+        run: ./gradlew allureReport
+        
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build/allure-report
+          name: test-results
+          path: build/reports/tests/test
