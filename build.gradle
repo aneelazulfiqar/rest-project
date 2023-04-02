@@ -35,9 +35,6 @@ openApiGenerate {
     modelPackage = "com.aneela.generated.model"
     inputSpec = "$rootDir/src/main/resources/api/swagger_spec.yaml".toString()
     outputDir = outputDirectory
-    configOptions = [
-            dateLibrary: "java8"
-    ]
 }
 
 sourceSets {
@@ -49,12 +46,12 @@ sourceSets {
 }
 
 task removeModels(type: Delete) {
-    delete "$rootDir/generated"
+    delete "$buildDir/generated"
 }
 
-//tasks removeGeneratedModelsFromBuild(type: Delete) {
-//    delete "$buildDir/generated"
-//}
+task removeBuildDirectory(type: Delete) {
+    delete "$buildDir"
+}
 
 dependencies {
     // test ng
@@ -101,7 +98,6 @@ dependencies {
 
     implementation 'org.codehaus.groovy:groovy-xml:3.0.7'
     implementation 'org.aeonbits.owner:owner:1.0.12'
-    //implementation "io.qameta.allure.gradle.allure:allure-plugin:2.11.2"
     implementation 'com.github.javafaker:javafaker:1.0.2'
 }
 test {

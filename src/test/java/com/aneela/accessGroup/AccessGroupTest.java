@@ -16,7 +16,7 @@ public class AccessGroupTest extends BaseTest {
 
     @Test(groups = {"smoke"})
     @Severity(SeverityLevel.NORMAL)
-    @Story("Creates a access group")
+    @Story("Creates an access group")
     @Description("POST/v1.1/sites/{{siteId}}/access_groups - verify adding new group to site}")
     public void verifyAddingGroupAccess() {
         SiteResponsePagedResponse siteResponse = SitesClient.getSites();
